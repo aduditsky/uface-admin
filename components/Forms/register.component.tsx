@@ -1,8 +1,7 @@
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+// import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as Yup from 'yup';
-
-export default RegisterForm;
 
 function RegisterForm() {
   // form validation rules
@@ -42,7 +41,7 @@ function RegisterForm() {
     title: string;
   }
 
-  function onSubmit(data: any) {
+  function onSubmit(data: IData) {
     console.log({ data });
     // display form data on success
     alert('SUCCESS!! :-)\n\n' + JSON.stringify(data, null, 4));
@@ -63,8 +62,8 @@ function RegisterForm() {
                 className={`form-control ${errors.title ? 'is-invalid' : ''}`}
               >
                 <option value=''></option>
-                <option value='Mr'>Муж.</option>
-                <option value='Mrs'>Жен.</option>
+                <option value='Муж.'>Муж.</option>
+                <option value='Жен.'>Жен.</option>
               </select>
               <div className='invalid-feedback'>{errors.title?.message}</div>
             </div>
@@ -179,3 +178,5 @@ function RegisterForm() {
     </div>
   );
 }
+
+export default RegisterForm;
