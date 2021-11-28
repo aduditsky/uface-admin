@@ -22,6 +22,7 @@ export default async function handler(
     'Basic ' + btoa(unescape(encodeURIComponent(login + ':' + password)))
   );
 
+  //Это сделано для локального хоста, вообще внутри сети или внутри одного сервера это будет лишним
   const httpsAgent = new https.Agent({
     rejectUnauthorized: false,
   });
@@ -33,7 +34,6 @@ export default async function handler(
     agent: httpsAgent,
   };
 
-  //Надо настроить на сервере SSL соединение. Без него будет ошибка failed, reason: certificate has expired. В Postman все работает.
   await fetch('https://78.140.15.84:8443/persident/admlogin', requestOptions)
     .then((response) => response.text())
     .then((result) => {
