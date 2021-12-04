@@ -2,10 +2,12 @@ import { useForm } from 'react-hook-form';
 // import { yupResolver } from '@hookform/resolvers/yup';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as Yup from 'yup';
-import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useGlobalContext } from '../../context/global';
 
 function LoginForm() {
-  const [checkData, setCheck] = useState('');
+  const router = useRouter();
+  const { authenticated, user, setUser } = useGlobalContext();
 
   // form validation rules
   const validationSchema = Yup.object().shape({
@@ -28,8 +30,10 @@ function LoginForm() {
   async function submitHandler(data: IData) {
     const check = await onClickHandler(data);
     // display form data on success
-    console.log({ check });
-    setCheck(check);
+
+    sessionStorage.setItem('user', JSON.stringify(check));
+
+    setUser(check);
   }
 
   const onClickHandler = async (user: IData) => {
@@ -43,6 +47,8 @@ function LoginForm() {
     const data = await res.json();
     return data;
   };
+
+  authenticated && router.push('/dashboard');
 
   return (
     <div className='card m-3'>
@@ -89,9 +95,9 @@ function LoginForm() {
           </div>
         </form>
         <p>
-          {checkData.status === 'success'
+          {user?.status === 'success'
             ? `Авторизация успешно выполнена`
-            : checkData.status === 'error' && `Неверный логин или пароль`}
+            : user?.status === 'error' && `Неверный логин или пароль`}
         </p>
       </div>
     </div>
