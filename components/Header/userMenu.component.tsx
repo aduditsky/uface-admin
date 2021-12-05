@@ -1,6 +1,12 @@
-import { IUser } from 'context/global';
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
+
+//Context
+import { IUser } from 'context/global';
+
+//Styles
 import {
+  ListItem,
   ListStyles,
   UserHeader,
   UserMenuStyles,
@@ -8,7 +14,6 @@ import {
 } from './header.styles';
 
 //interfaces
-
 interface IProps {
   user: IUser | null;
 }
@@ -29,12 +34,11 @@ const UserMenu = ({ user }: IProps) => {
     setY(headUser.current?.getBoundingClientRect().bottom);
   }, [isOpen]);
 
-  console.log({ x, y });
-
   return (
     user && (
       <UserMenuStyles>
         <UserHeader
+          className={isOpen ? 'active' : ''}
           ref={headUser}
           onClick={() => {
             setOpen(!isOpen);
@@ -67,7 +71,15 @@ interface IList {
   l: number | undefined;
 }
 function MenuList({ t, l }: IList) {
-  return <ListStyles w={230} t={t} l={l}></ListStyles>;
+  return (
+    <ListStyles w={230} t={t} l={l}>
+      <ListItem>
+        <Link href='/dashboard/personal'>
+          <a>Личные данные</a>
+        </Link>
+      </ListItem>
+    </ListStyles>
+  );
 }
 
 export default UserMenu;

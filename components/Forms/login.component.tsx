@@ -59,6 +59,7 @@ function LoginForm() {
             <div className='form-group col'>
               <label>Login</label>
               <input
+                // @ts-ignore
                 name='login'
                 type='text'
                 {...register('login')}
@@ -71,6 +72,7 @@ function LoginForm() {
             <div className='form-group col'>
               <label>Password</label>
               <input
+                // @ts-ignore
                 name='password'
                 type='password'
                 {...register('password')}

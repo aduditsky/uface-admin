@@ -23,7 +23,10 @@ export const UserMenuStyles = styled.div`
   display: flex;
 `;
 
-export const UserHeader = styled.div`
+interface IUserHeader {
+  className: string;
+}
+export const UserHeader = styled.div<IUserHeader>`
   border-radius: 7px;
   display: flex;
   justify-content: center;
@@ -35,6 +38,10 @@ export const UserHeader = styled.div`
 
   transition: 0.3s cubic-bezier(0.77, 0, 0.175, 1);
   &:hover {
+    background-color: #ccc;
+  }
+
+  &.active {
     background-color: #ccc;
   }
 `;
@@ -63,11 +70,18 @@ interface ICoord {
   l: number | undefined;
   w: number | undefined;
 }
-export const ListStyles = styled.div<ICoord>`
+export const ListStyles = styled.ul<ICoord>`
   width: ${(props) => props.w}px;
-  height: 300px;
+  /* height: 300px; */
+  padding: 1em 0;
   top: ${(props) => props.t}px;
   left: ${(props) => props.l - props.w}px;
   background-color: #eee;
   position: fixed;
+`;
+
+export const ListItem = styled.li`
+  width: 100%;
+  display: flex;
+  padding: 0.5em;
 `;

@@ -57,6 +57,7 @@ function RegisterForm() {
             <div className='form-group col'>
               <label>Пол</label>
               <select
+                // @ts-ignore
                 name='title'
                 {...register('title')}
                 className={`form-control ${errors.title ? 'is-invalid' : ''}`}
@@ -70,6 +71,7 @@ function RegisterForm() {
             <div className='form-group col-5'>
               <label>First Name</label>
               <input
+                // @ts-ignore
                 name='firstName'
                 type='text'
                 {...register('firstName')}
@@ -84,6 +86,7 @@ function RegisterForm() {
             <div className='form-group col-5'>
               <label>Last Name</label>
               <input
+                // @ts-ignore
                 name='lastName'
                 type='text'
                 {...register('lastName')}
@@ -98,6 +101,7 @@ function RegisterForm() {
             <div className='form-group col'>
               <label>Date of Birth</label>
               <input
+                // @ts-ignore
                 name='dob'
                 type='date'
                 {...register('dob')}
@@ -108,6 +112,7 @@ function RegisterForm() {
             <div className='form-group col'>
               <label>Email</label>
               <input
+                // @ts-ignore
                 name='email'
                 type='text'
                 {...register('email')}
@@ -120,6 +125,7 @@ function RegisterForm() {
             <div className='form-group col'>
               <label>Password</label>
               <input
+                // @ts-ignore
                 name='password'
                 type='password'
                 {...register('password')}
@@ -132,6 +138,7 @@ function RegisterForm() {
             <div className='form-group col'>
               <label>Confirm Password</label>
               <input
+                // @ts-ignore
                 name='confirmPassword'
                 type='password'
                 {...register('confirmPassword')}
@@ -146,6 +153,7 @@ function RegisterForm() {
           </div>
           <div className='form-group form-check'>
             <input
+              // @ts-ignore
               name='acceptTerms'
               type='checkbox'
               {...register('acceptTerms')}
