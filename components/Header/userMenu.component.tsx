@@ -12,6 +12,8 @@ import {
   UserMenuStyles,
   UserPicture,
 } from './header.styles';
+import { getEventListeners } from 'events';
+import { debounce } from 'lib/debonce';
 
 //interfaces
 interface IProps {
@@ -22,17 +24,29 @@ const UserMenu = ({ user }: IProps) => {
   const headUser = useRef<HTMLDivElement | null>(null);
   const [isOpen, setOpen] = useState<boolean>(false);
 
-  const [x, setX] = useState<number | undefined>(
-    headUser.current?.getBoundingClientRect().right
-  );
-  const [y, setY] = useState<number | undefined>(
-    headUser.current?.getBoundingClientRect().bottom
-  );
+  const [dimensions, setDimensions] = useState<{
+    x: number;
+    y: number;
+  }>({
+    x: headUser.current?.getBoundingClientRect().right || 0,
+    y: headUser.current?.getBoundingClientRect().bottom || 0,
+  });
 
   useEffect(() => {
-    setX(headUser.current?.getBoundingClientRect().right);
-    setY(headUser.current?.getBoundingClientRect().bottom);
-  }, [isOpen]);
+    if (typeof window !== 'undefined') {
+      const handleResize = (): void => {
+        setDimensions({
+          x: headUser.current?.getBoundingClientRect().right || 0,
+          y: headUser.current?.getBoundingClientRect().bottom || 0,
+        });
+      };
+
+      window.addEventListener('resize', handleResize);
+      return (): void => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [isOpen, dimensions]);
 
   return (
     user && (
@@ -42,6 +56,10 @@ const UserMenu = ({ user }: IProps) => {
           ref={headUser}
           onClick={() => {
             setOpen(!isOpen);
+            setDimensions({
+              x: headUser.current?.getBoundingClientRect().right || 0,
+              y: headUser.current?.getBoundingClientRect().bottom || 0,
+            });
           }}
         >
           <UserPicture>
@@ -60,19 +78,19 @@ const UserMenu = ({ user }: IProps) => {
             <i className='fas fa-chevron-down'></i>
           )}
         </UserHeader>
-        {isOpen && <MenuList t={y} l={x} />}
+        {isOpen && <MenuList t={dimensions.y} l={dimensions.x} />}
       </UserMenuStyles>
     )
   );
 };
 
 interface IList {
-  t: number | undefined;
-  l: number | undefined;
+  t: number;
+  l: number;
 }
 function MenuList({ t, l }: IList) {
   return (
-    <ListStyles w={230} t={t} l={l}>
+    <ListStyles w={230} style={{ top: t, left: l - 230 }}>
       <ListItem>
         <Link href='/dashboard/personal'>
           <a>Личные данные</a>

@@ -66,16 +66,12 @@ export const UserPicture = styled.div`
 `;
 
 interface ICoord {
-  t: number | undefined;
-  l: number | undefined;
-  w: number | undefined;
+  w: number;
 }
 export const ListStyles = styled.ul<ICoord>`
   width: ${(props) => props.w}px;
   /* height: 300px; */
   padding: 1em 0;
-  top: ${(props) => props.t}px;
-  left: ${(props) => props.l - props.w}px;
   background-color: #eee;
   position: fixed;
 `;
