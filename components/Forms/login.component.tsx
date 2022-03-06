@@ -31,6 +31,9 @@ function LoginForm() {
     const check = await onClickHandler(data);
     // display form data on success
 
+    sessionStorage.setItem('login', data.login);
+    sessionStorage.setItem('password', data.password);
+
     sessionStorage.setItem('user', JSON.stringify(check));
 
     setUser(check);

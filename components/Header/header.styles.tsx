@@ -78,6 +78,11 @@ export const ListStyles = styled.ul<ICoord>`
 
 export const ListItem = styled.li`
   width: 100%;
+  flex-direction: column;
   display: flex;
   padding: 0.5em;
+  cursor: pointer;
+
+  span {
+  }
 `;

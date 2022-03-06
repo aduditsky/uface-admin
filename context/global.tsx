@@ -21,7 +21,7 @@ export interface IUser {
 export type GlobalContent = {
   authenticated: boolean;
   user: IUser | null;
-  setUser: (u: IUser) => void;
+  setUser: (u: IUser | null) => void;
 };
 
 export const GlobalContext = createContext<GlobalContent>({

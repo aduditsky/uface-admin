@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 //Context
-import { IUser } from 'context/global';
+import { IUser, useGlobalContext } from 'context/global';
 
 //Styles
 import {
@@ -89,12 +90,26 @@ interface IList {
   l: number;
 }
 function MenuList({ t, l }: IList) {
+  const router = useRouter();
+  const { setUser } = useGlobalContext();
+
+  const logoutHandler = () => {
+    sessionStorage.removeItem('login');
+    sessionStorage.removeItem('password');
+    sessionStorage.removeItem('user');
+    setUser(null);
+    router.push('login');
+  };
+
   return (
     <ListStyles w={230} style={{ top: t, left: l - 230 }}>
       <ListItem>
         <Link href='/dashboard/personal'>
           <a>Личные данные</a>
         </Link>
+      </ListItem>
+      <ListItem onClick={logoutHandler}>
+        <span>Выйти</span>
       </ListItem>
     </ListStyles>
   );

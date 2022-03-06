@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { Key, useEffect, useState } from 'react';
 import type { GetServerSideProps, NextApiRequest, NextPage } from 'next';
 import CryptoJS from 'crypto-js';
-import VisitorsTable from 'components/VisitorsTable/visitors.components';
+import VisitorsTable from 'components/clients/clients.components';
 
 //context
 import { IUser, useGlobalContext } from 'context/global';
@@ -13,16 +13,17 @@ import { DashboardBody } from 'styles/dashboard.styles';
 import StatsComponents from 'components/Stats/stats.components';
 
 //interfaces
-interface IProps {
-  user: IUser;
-}
+interface IProps {}
 
 const DashboardPage: NextPage = ({}: IProps) => {
   //Временная мера
   const { setUser } = useGlobalContext();
+
   useEffect(() => {
     if (window) {
+      //@ts-ignore
       if (sessionStorage.getItem('user')?.length > 0) {
+        //@ts-ignore
         const user = JSON.parse(sessionStorage.getItem('user'));
         setUser(user);
       }
@@ -49,6 +50,7 @@ const DashboardPage: NextPage = ({}: IProps) => {
     <DashboardBody>
       <StatsComponents />
       <VisitorsTable />
+
       {/* <div>{`JSON: ` + JSON.stringify(user)}</div>
       <br />
       <div>{`Encrypt: ` + ciphertext}</div>
