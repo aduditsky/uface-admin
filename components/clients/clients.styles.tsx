@@ -3,6 +3,10 @@ export const CogContainer = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
+
+  input[type='checkbox'] {
+    background-color: #2c2c2c;
+  }
 `;
 interface ICoord {
   w: number;
@@ -23,12 +27,13 @@ export const SelectorContainer = styled.div`
 export const CogButton = styled.i`
   cursor: pointer;
   &.active {
-    color: #2b2b94;
+    color: #111;
   }
 `;
 
 export const InputStyles = styled.input`
   transform: translateY(-50%);
+  color: #2c2c2c;
   margin-right: 8px;
 `;
 
@@ -58,6 +63,18 @@ export const Background = styled.div`
 
 export const Foreground = styled.img``;
 
+export const Tr = styled.tr`
+  button {
+    border: none;
+    padding: 0.3em 1em;
+    color: #fff;
+    box-shadow: 0 2px 4px rgb(138 149 158 / 20%);
+    border-radius: 5px 30px 30px 30px;
+    letter-spacing: 0.38px;
+    background-color: #2c2c2c;
+  }
+`;
+
 export const PagginationStyles = styled.div`
   display: flex;
   gap: 15px;
@@ -65,6 +82,45 @@ export const PagginationStyles = styled.div`
   align-items: center;
   justify-content: center;
   padding: 5px;
+
+  input {
+    background: #f2f2f2;
+    border-radius: 26px 26px 5px 26px;
+    outline: none;
+    color: #2c2c2c;
+    padding-left: 18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 18px;
+    border: none;
+    width: 100px;
+
+    &.page {
+      width: 70px;
+    }
+  }
+
+  button {
+    border: none;
+    padding: 0.3em 1em;
+    color: #fff;
+    box-shadow: 0 2px 4px rgb(138 149 158 / 20%);
+    border-radius: 5px 30px 30px 30px;
+    letter-spacing: 0.38px;
+    background-color: #2c2c2c;
+  }
+
+  select {
+    background: #f2f2f2;
+    border-radius: 26px 26px 5px 26px;
+    outline: none;
+    color: #2c2c2c;
+    padding-left: 18px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 18px;
+    border: none;
+  }
 
   label {
     margin: 0;
@@ -92,10 +148,6 @@ export const PagginationStyles = styled.div`
     justify-content: center;
   }
 
-  input {
-    width: 40px;
-  }
-
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
@@ -111,12 +163,5 @@ export const PagginationStyles = styled.div`
   .active {
     font-size: 1.2em;
     font-weight: bold;
-  }
-
-  button {
-    border: none;
-    padding: 0.6em 1em;
-    background: none;
-    box-shadow: none;
   }
 `;

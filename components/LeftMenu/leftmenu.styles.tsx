@@ -18,7 +18,7 @@ export const LeftMenuContainer = styled.nav<IMenuProps>`
   position: fixed;
   z-index: 101;
 
-  background-color: #2f7fed;
+  background-color: #2c2c2c;
   box-shadow: 6px 14px 14px rgb(123 135 170 / 24%);
 
   transition: 0.5s ease;
@@ -48,9 +48,9 @@ export const ListItemStyles = styled.li`
   list-style: none;
   gap: 1em;
 
-  background-color: #2f7fed;
+  background-color: #2c2c2c;
   &:hover {
-    background-color: rgba(22, 60, 110, 0.5);
+    background-color: rgba(52, 59, 70, 0.5);
   }
 
   i {
@@ -93,7 +93,7 @@ export const Button = styled.button<IButton>`
   outline: none !important;
   border: none;
   box-shadow: none;
-  background-color: #2f7fed;
+  background-color: #2c2c2c;
 `;
 
 interface ILogo {
@@ -110,7 +110,7 @@ export const Logo = styled.div<ILogo>`
   justify-content: flex-start;
 
   &:hover {
-    background-color: rgba(22, 60, 110, 0.5);
+    background-color: rgba(52, 59, 70, 0.5);
   }
 
   a {

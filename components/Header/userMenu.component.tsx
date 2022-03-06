@@ -13,8 +13,6 @@ import {
   UserMenuStyles,
   UserPicture,
 } from './header.styles';
-import { getEventListeners } from 'events';
-import { debounce } from 'lib/debonce';
 
 //interfaces
 interface IProps {
@@ -79,7 +77,13 @@ const UserMenu = ({ user }: IProps) => {
             <i className='fas fa-chevron-down'></i>
           )}
         </UserHeader>
-        {isOpen && <MenuList t={dimensions.y} l={dimensions.x} />}
+        {isOpen && (
+          <MenuList
+            close={() => setOpen(false)}
+            t={dimensions.y}
+            l={dimensions.x}
+          />
+        )}
       </UserMenuStyles>
     )
   );
@@ -88,8 +92,9 @@ const UserMenu = ({ user }: IProps) => {
 interface IList {
   t: number;
   l: number;
+  close: () => void;
 }
-function MenuList({ t, l }: IList) {
+function MenuList({ t, l, close }: IList) {
   const router = useRouter();
   const { setUser } = useGlobalContext();
 
@@ -103,12 +108,17 @@ function MenuList({ t, l }: IList) {
 
   return (
     <ListStyles w={230} style={{ top: t, left: l - 230 }}>
-      <ListItem>
+      <ListItem onClick={close}>
         <Link href='/dashboard/personal'>
           <a>Личные данные</a>
         </Link>
       </ListItem>
-      <ListItem onClick={logoutHandler}>
+      <ListItem
+        onClick={() => {
+          close;
+          logoutHandler;
+        }}
+      >
         <span>Выйти</span>
       </ListItem>
     </ListStyles>

@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 
 //Сontext
 import { useGlobalContext } from 'context/global';
+import { FormContainer } from './styles/personal.styles';
 
 //Interfaces
 interface IForm {
@@ -54,7 +55,7 @@ function PersonalInfo() {
   interface IEyeProps {
     error: string | undefined;
   }
-  const EyeStyles = styled.i`
+  const EyeStyles = styled.i<IEyeProps>`
     position: absolute;
     right: ${(props) => (props.error ? '34px' : '15px')};
     top: 50%;
@@ -70,7 +71,7 @@ function PersonalInfo() {
     return false;
   }
   return (
-    <div className='card m-3'>
+    <FormContainer className='card m-3'>
       <h3 className='card-header'>Изменение личных данных</h3>{' '}
       <div className='card-body'>
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -170,7 +171,7 @@ function PersonalInfo() {
           </div>
         </form>
       </div>
-    </div>
+    </FormContainer>
   );
 }
 export default PersonalInfo;

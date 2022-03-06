@@ -56,7 +56,7 @@ export const UserPicture = styled.div`
   height: 32px;
 
   background-color: #fff;
-  border: 2px solid #180081;
+  border: 2px solid #2c2c2c;
   border-radius: 50%;
 
   i {

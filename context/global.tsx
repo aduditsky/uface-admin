@@ -1,3 +1,4 @@
+import { IClient } from 'components/clients/clients.components';
 import {
   createContext,
   ReactNode,
@@ -21,22 +22,29 @@ export interface IUser {
 export type GlobalContent = {
   authenticated: boolean;
   user: IUser | null;
+  editUser: IClient | null;
   setUser: (u: IUser | null) => void;
+  setEditUser: (u: IClient | null) => void;
 };
 
 export const GlobalContext = createContext<GlobalContent>({
   authenticated: false, // set a default value
   user: null,
+  editUser: null,
   setUser: () => {},
+  setEditUser: () => {},
 });
 
 export const useGlobalContext = () => useContext(GlobalContext);
 
 export default function ContextProvider({ children }: IProps) {
   const [user, setUser] = useState<IUser | null>(null);
+  const [editUser, setEditUser] = useState<IClient | null>(null);
 
   return (
-    <GlobalContext.Provider value={{ authenticated: !!user, user, setUser }}>
+    <GlobalContext.Provider
+      value={{ authenticated: !!user, user, setUser, editUser, setEditUser }}
+    >
       {children}
     </GlobalContext.Provider>
   );

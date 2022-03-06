@@ -1,10 +1,16 @@
 import { Table } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
-import { OutData, PagginationStyles } from './clients.styles';
-import CogComponent from './cog.component';
 import LoadingSpin from 'react-loading-spin';
 
-interface IClient {
+//Components
+import CogComponent from './cog.component';
+
+//Styles
+import { OutData, PagginationStyles, Tr } from './clients.styles';
+import ModalEdit from 'components/modal-edit/modal-edit.component';
+import { useGlobalContext } from 'context/global';
+
+export interface IClient {
   date_created: string;
   email: string;
   fio: string;
@@ -15,7 +21,7 @@ interface IClient {
   photo: string;
 }
 
-interface IPhoto {
+export interface IPhoto {
   base64: string;
   main: boolean;
   faceid: string;
@@ -28,6 +34,7 @@ const TableRow = ({
   item: IClient;
   filtering: { property: string; name: string }[];
 }) => {
+  const { setEditUser } = useGlobalContext();
   const [photo, setPhoto] = useState<string>('');
   useEffect(() => {
     async function getPhoto() {
@@ -58,7 +65,7 @@ const TableRow = ({
   }, []);
 
   return (
-    <tr key={item.personid}>
+    <Tr key={item.personid}>
       <td
         style={{ cursor: 'pointer', height: 40, width: 80 }}
         className={'d' + filtering[0].property}
@@ -72,7 +79,7 @@ const TableRow = ({
             />
           </>
         ) : (
-          <LoadingSpin size='36px' />
+          <LoadingSpin primaryColor={'#2c2c2c'} size='36px' />
         )}
       </td>
 
@@ -85,9 +92,11 @@ const TableRow = ({
       <td className={'d' + filtering[6].property}>{item.role}</td>
       <td className={'d' + filtering[7].property}>{item.date_created}</td>
       <td className={'d'}>
-        <button type='button'>Изменить</button>
+        <button type='button' onClick={() => setEditUser(item)}>
+          Изменить
+        </button>
       </td>
-    </tr>
+    </Tr>
   );
 };
 
@@ -165,13 +174,14 @@ const VisitorsTable = () => {
             <option value={20}>20</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
-            <option value={250}>250</option>
+            <option value={300}>300</option>
             <option value={500}>500</option>
           </select>
         </label>
         <div className='current-offset'>
           <div>Перейти на </div>
           <input
+            className='page'
             type='number'
             value={offsetInput}
             onBlur={() => setInputValue(Math.round(offset + 1))}
@@ -249,9 +259,9 @@ const VisitorsTable = () => {
 
   return (
     <>
-      {clients.length > 0 && <Pagination />}
+      {clients?.length > 0 && <Pagination />}
       <CogComponent filtering={filtering} setFilter={setFilter} />
-      {clients.length > 0 &&
+      {clients?.length > 0 &&
       filtering.filter((item) => item.property !== '-none').length !== 0 ? (
         <Table striped borderless hover responsive size='lg'>
           <thead>
@@ -280,7 +290,8 @@ const VisitorsTable = () => {
       ) : (
         <OutData>Нет данных</OutData>
       )}
-      {clients.length > 0 && <Pagination />}
+      {clients?.length > 0 && <Pagination />}
+      <ModalEdit />
     </>
   );
 };
