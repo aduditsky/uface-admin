@@ -60,9 +60,8 @@ export default async function handler(
 	);
 	console.log(pid);
 	let urlencoded = new URLSearchParams();
-	// urlencoded.append('pid', pid);
-	// urlencoded.append('folk', JSON.stringify(folk));
-	urlencoded.append('pid', '1e150f0a3d0742c6bd2df386c899f60b');
+
+	urlencoded.append('pid', pid);
 	urlencoded.append('folk', JSON.stringify(folk));
 
 	//Это сделано для локального хоста, вообще внутри сети или внутри одного сервера это будет лишним
