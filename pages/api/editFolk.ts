@@ -3,6 +3,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import https from 'https';
+import moment from 'moment';
 import { url } from 'inspector';
 
 type IReqOption = {
@@ -44,7 +45,7 @@ export default async function handler(
 		lname: lname,
 		sname: sname,
 		fio: lname + ' ' + fname + ' ' + sname,
-		dateborn: dateborn,
+		dateborn: moment(dateborn, 'YYYY-MM-DD').format('DD.MM.YYYY'),
 		phone: phone,
 		email: email,
 		phone_approve: phone_approve,
@@ -57,10 +58,12 @@ export default async function handler(
 		'Authorization',
 		'Basic ' + Buffer.from(login + ':' + password, 'binary').toString('base64')
 	);
-
+	console.log(pid);
 	let urlencoded = new URLSearchParams();
-	urlencoded.append('pid', pid);
-	urlencoded.append('folk', JSON.stringify(folk).slice(1, -1));
+	// urlencoded.append('pid', pid);
+	// urlencoded.append('folk', JSON.stringify(folk));
+	urlencoded.append('pid', '1e150f0a3d0742c6bd2df386c899f60b');
+	urlencoded.append('folk', JSON.stringify(folk));
 
 	//Это сделано для локального хоста, вообще внутри сети или внутри одного сервера это будет лишним
 	const httpsAgent = new https.Agent({
@@ -76,10 +79,10 @@ export default async function handler(
 	};
 
 	console.log({ folk });
-	console.log('activated: ' + folk.activated);
+	// console.log('activated: ' + folk.activated);
 	console.log(JSON.stringify(folk));
 	console.log({ login, password });
-	await fetch('https://78.140.15.84:8443/persident/processfolk', requestOptions)
+	await fetch('https://uface.su/persident/processfolk', requestOptions)
 		.then((response) => response.text())
 		.then((result) => {
 			res.status(200).json(result);
