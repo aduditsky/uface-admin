@@ -103,7 +103,7 @@ function MenuList({ t, l, close }: IList) {
     sessionStorage.removeItem('password');
     sessionStorage.removeItem('user');
     setUser(null);
-    router.push('login');
+    router.push('/login');
   };
 
   return (
@@ -115,8 +115,8 @@ function MenuList({ t, l, close }: IList) {
       </ListItem>
       <ListItem
         onClick={() => {
-          close;
-          logoutHandler;
+          close();
+          logoutHandler();
         }}
       >
         <span>Выйти</span>

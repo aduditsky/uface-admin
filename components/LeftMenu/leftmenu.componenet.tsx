@@ -12,13 +12,15 @@ import {
   ListItemStyles,
   Logo,
 } from './leftmenu.styles';
+import { useRouter } from 'next/router';
 
 const LeftMenuComponent = () => {
+  const router = useRouter();
   const { user } = useGlobalContext();
 
   const [isOpen, setOpen] = useState<boolean>(false);
 
-  return user?.status === 'success' ? (
+  return user?.status === 'success' && router.pathname !== '/login' ? (
     <LeftMenuContainer open={isOpen}>
       <Logo open={isOpen}>
         <Link href='/dashboard'>
