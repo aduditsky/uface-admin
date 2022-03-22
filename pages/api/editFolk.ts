@@ -58,7 +58,6 @@ export default async function handler(
 		'Authorization',
 		'Basic ' + Buffer.from(login + ':' + password, 'binary').toString('base64')
 	);
-	console.log(pid);
 	let urlencoded = new URLSearchParams();
 
 	urlencoded.append('pid', pid);
@@ -77,10 +76,7 @@ export default async function handler(
 		agent: httpsAgent,
 	};
 
-	console.log({ folk });
 	// console.log('activated: ' + folk.activated);
-	console.log(JSON.stringify(folk));
-	console.log({ login, password });
 	await fetch('https://uface.su/persident/processfolk', requestOptions)
 		.then((response) => response.text())
 		.then((result) => {
