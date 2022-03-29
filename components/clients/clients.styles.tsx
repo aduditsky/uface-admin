@@ -73,6 +73,13 @@ export const Tr = styled.tr`
     letter-spacing: 0.38px;
     background-color: #2c2c2c;
   }
+
+  .manage-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 export const PagginationStyles = styled.div`

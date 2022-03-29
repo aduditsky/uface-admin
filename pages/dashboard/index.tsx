@@ -1,6 +1,5 @@
-import { Key, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { GetServerSideProps, NextApiRequest, NextPage } from 'next';
-import CryptoJS from 'crypto-js';
 import VisitorsTable from 'components/clients/clients.components';
 
 //context
@@ -30,32 +29,10 @@ const DashboardPage: NextPage = ({}: IProps) => {
     }
   }, []);
 
-  // // Encrypt
-  // let ciphertext = CryptoJS.AES.encrypt(
-  //   JSON.stringify(user),
-  //   'secret key 123'
-  // ).toString();
-
-  // // Decrypt
-  // let bytes = CryptoJS.AES.decrypt(ciphertext, 'secret key 123');
-  // bytes = CryptoJS.AES.decrypt(
-  //   sessionStorage.getItem('user'),
-  //   'secret key 123'
-  // );
-  // let originalText = bytes.toString(CryptoJS.enc.Utf8);
-
-  // sessionStorage.setItem('user', ciphertext);
-
   return (
     <DashboardBody>
-      <StatsComponents />
+      {/* <StatsComponents /> */}
       <VisitorsTable />
-
-      {/* <div>{`JSON: ` + JSON.stringify(user)}</div>
-      <br />
-      <div>{`Encrypt: ` + ciphertext}</div>
-      <br />
-      <div>{`Decrypt: ` + originalText}</div> */}
     </DashboardBody>
   );
 };
