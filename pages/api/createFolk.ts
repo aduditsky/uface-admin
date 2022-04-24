@@ -28,6 +28,7 @@ export default async function handler(
     dateborn,
     role_kod,
     vuz_kod,
+    photo,
   } = req.body.data;
 
   console.log(req.body.data);
@@ -60,8 +61,7 @@ export default async function handler(
   );
   urlencoded.append('folkrole', role_kod);
   urlencoded.append('institute', vuz_kod);
-  //Бойлер код для тестов
-  //   urlencoded.append('img64', 'iVBORw0KGgoAAAANSUhEUgAAAUAAAADwCAY');
+  urlencoded.append('img64', photo);
 
   var requestOptions: IReqOption = {
     method: 'POST',

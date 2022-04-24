@@ -138,16 +138,18 @@ const TableRow = ({
     let login = sessionStorage.getItem('login');
     let password = sessionStorage.getItem('password');
 
-    const userData = { login, password, pid: item.personid };
+    const data = { login, password, pid: item.personid };
 
-    console.log({ userData });
-    // const delFunc = await fetch('/api/delFolk', {
-    //   method: 'DELETE',
-    //   body: JSON.stringify({ userData }),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
+    console.log({ data });
+    const delFunc = await fetch('/api/delFolk', {
+      method: 'DELETE',
+      body: JSON.stringify({ data }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    console.log({ delFunc });
   };
 
   return (

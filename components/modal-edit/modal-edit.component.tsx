@@ -2,10 +2,16 @@ import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import * as Yup from 'yup';
-import { useGlobalContext } from '../../context/global';
 import { Bars } from 'react-loader-spinner';
 import { gsap } from 'gsap';
 import PictureCropper from 'components/cropper/cropper.component';
+import moment from 'moment';
+import imageCompression from 'browser-image-compression';
+
+import { useGlobalContext } from '../../context/global';
+
+import { IPhoto } from 'components/clients/clients.components';
+
 import {
   CloseButton,
   Container,
@@ -14,8 +20,6 @@ import {
   LoaderContainer,
   Modal,
 } from './modal-edit.styles';
-import { IPhoto } from 'components/clients/clients.components';
-import moment from 'moment';
 
 const ModalEdit = () => {
   const modalRef = useRef(null);
@@ -31,6 +35,13 @@ const ModalEdit = () => {
   const [cropperPhoto, setCropperPhoto] = useState<string>('');
   const [loadedPhoto, setLoadedPhoto] = useState<boolean>();
   const [cropperActive, setCropperActive] = useState<boolean>(false);
+
+  //Камера и инпут фото
+  const [isCamera, setIsCamera] = useState(false);
+  const [bufferPhoto, setBufferPhoto] = useState(null);
+  const [secondRemaining, setSeconds] = useState(3);
+
+  let inpFile: any = null;
 
   //Func
   async function getPhoto() {
@@ -58,10 +69,6 @@ const ModalEdit = () => {
       return base64;
     }
   }
-
-  // if (!editUser) return <></>;
-
-  // form validation rules
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email('E-Mail должен быть правильным')
@@ -109,6 +116,7 @@ const ModalEdit = () => {
     password: string | null;
     activated: string;
     phone_approve: string;
+    photo: string;
   }
 
   const updateCroppedPhoto = (photo: string) => {
@@ -131,10 +139,13 @@ const ModalEdit = () => {
         : 'Редактирование пользователя'
     );
 
+    console.log({ data });
+
     data.login = login;
     data.password = password;
     data.activated = `${data.activated}`;
     data.phone_approve = data.phone_approve ? '1' : '0';
+    data.photo = photo;
 
     const res = await fetch(api, {
       method: 'PUT',
@@ -204,10 +215,44 @@ const ModalEdit = () => {
     }
 
     reset();
-    if (editUser && editUser?.isCreate === false) {
-      getPhoto();
-    }
+    getPhoto();
+    // if (editUser && editUser?.isCreate === false) {
+    // }
   }, [editUser]);
+
+  const toBase64 = (file: any) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  //Функции камеры и загрузки изображений
+  const uploadFile = async (e: any) => {
+    const file = e.currentTarget.files[0];
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1080,
+    };
+    try {
+      const compressedFile = await imageCompression(file, options);
+      const result: any = await toBase64(compressedFile).catch((e) => Error(e));
+      // .then((result) => console.log(result));
+
+      //Для дебагинга фото исходного
+      // await toBase64(file)
+      //   .catch((e) => Error(e))
+      //   .then((result) => console.log(result));
+
+      // setBufferPhoto(result);
+      setPhoto(result);
+      setLoadedPhoto(true);
+      // await uploadBase64(bufferPhoto, photoNumber);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   //Рендер
   return editUser ? (
@@ -250,6 +295,47 @@ const ModalEdit = () => {
                 : 'Изменение пользователя'}
             </h3>
             <div className='card-body'>
+              {editUser?.isCreate && (
+                <Image>
+                  {photo !== '' ? (
+                    <Image>
+                      {photo && <img src={photo} height={200} />}
+                      <button
+                        type='button'
+                        className={'delete'}
+                        onClick={() => {
+                          setPhoto('');
+                        }}
+                      >
+                        Удалить
+                      </button>
+                    </Image>
+                  ) : (
+                    <div className='photos-block'>
+                      <span>Загрузите фотографии или сфотографируетесь</span>
+                      <button
+                        type='button'
+                        className={'upload'}
+                        onClick={() => {
+                          inpFile.click();
+                        }}
+                      >
+                        Загрузить фото
+                      </button>
+                      <button
+                        type='button'
+                        className={'photo'}
+                        onClick={() => {
+                          setIsCamera(true);
+                          setSeconds(3);
+                        }}
+                      >
+                        Сфотографироваться
+                      </button>
+                    </div>
+                  )}
+                </Image>
+              )}
               {!editUser?.isCreate && (
                 <>
                   {photo !== '' ? (
@@ -451,6 +537,13 @@ const ModalEdit = () => {
             </div>
           </div>
         </FormContainer>
+        <input
+          onChange={uploadFile}
+          style={{ display: 'none' }}
+          type='file'
+          ref={(inp) => (inpFile = inp)}
+          accept='image/x-png,image/gif,image/jpeg'
+        />
       </Container>
     </Modal>
   ) : (

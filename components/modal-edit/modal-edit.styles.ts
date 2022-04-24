@@ -31,6 +31,16 @@ export const Container = styled.div`
 export const FormContainer = styled.div`
   width: 100%;
 
+  .photos-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    width: 100%;
+    height: 100%;
+  }
+
   .buttons-block {
     display: flex;
     padding: 10px;
@@ -72,6 +82,20 @@ export const FormContainer = styled.div`
       background-color: #111;
     }
   }
+
+  .upload,
+  .photo {
+    border: none;
+    background-color: #fff;
+    padding: 5px;
+    color: #000;
+    border-radius: 0;
+    box-shadow: none;
+    text-decoration: underline;
+    &:hover {
+      background-color: #fff;
+    }
+  }
 `;
 
 export const CloseButton = styled.button`
@@ -106,6 +130,7 @@ export const Image = styled.div`
   height: 200px;
   padding: 15px;
   display: flex;
+  gap: 25px;
   justify-content: center;
   align-items: center;
 `;
