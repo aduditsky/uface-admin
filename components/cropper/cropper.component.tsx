@@ -7,10 +7,12 @@ const PictureCropper = ({
   img,
   callBackFunc,
   updateCropped,
+  closeFunc,
 }: {
   img: string;
-  callBackFunc: any;
-  updateCropped: any;
+  callBackFunc: () => void;
+  updateCropped: () => void;
+  closeFunc: () => void;
 }) => {
   const [cropper, setCropper] = useState<HTMLImageElement>();
   const [cropData, setCropData] = useState<string | null>();
@@ -52,7 +54,7 @@ const PictureCropper = ({
           responsive={true}
           autoCropArea={1}
           checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
-          onInitialized={(instance) => {
+          onInitialized={(instance: any) => {
             setCropper(instance);
           }}
           className={css.imageCropper}
@@ -67,7 +69,7 @@ const PictureCropper = ({
       )}
       {!cropData ? (
         <div>
-          <button className={css.buttonClass} onClick={closeCrop}>
+          <button className={css.buttonClass} onClick={closeFunc}>
             Отмена
           </button>
           <button className={css.buttonClass} onClick={getCropData}>

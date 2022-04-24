@@ -2,16 +2,20 @@ import { Table } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
 import LoadingSpin from 'react-loading-spin';
 
+//Context
+import { useGlobalContext } from 'context/global';
+
 //Components
 import CogComponent from './cog.component';
 
 //Styles
 import { OutData, PagginationStyles, Tr } from './clients.styles';
 import ModalEdit from 'components/modal-edit/modal-edit.component';
-import { useGlobalContext } from 'context/global';
+import styled from 'styled-components';
 
 export interface IClient {
   dateborn: string;
+  activated: any;
   email: string;
   fio: string;
   fname: string;
@@ -20,12 +24,14 @@ export interface IClient {
   id: string;
   personid: string;
   phone: string;
+  phone_approve: any;
   role: string;
   photo: string;
   vuz_title: string;
   vuz_kod: string;
   role_title: string;
   role_kod: string;
+  isCreate: boolean;
 }
 
 export interface IPhoto {
@@ -33,6 +39,61 @@ export interface IPhoto {
   main: boolean;
   faceid: string;
 }
+
+const PanelStyles = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+
+  padding: 10px 5px;
+
+  button {
+    border: none;
+    padding: 0.3em 1em;
+    color: #fff;
+    box-shadow: 0 2px 4px rgb(138 149 158 / 20%);
+    border-radius: 5px 30px 30px 30px;
+    letter-spacing: 0.38px;
+    background-color: #2c2c2c;
+  }
+`;
+
+const PanelAndFilter = () => {
+  const { setEditUser } = useGlobalContext();
+
+  return (
+    <PanelStyles>
+      <button
+        type='button'
+        onClick={() => {
+          setEditUser({
+            dateborn: '',
+            activated: false,
+            email: '',
+            fio: '',
+            fname: '',
+            lname: '',
+            sname: '',
+            id: '',
+            personid: '',
+            phone: '',
+            phone_approve: false,
+            role: '',
+            photo: '',
+            vuz_title: '',
+            vuz_kod: '',
+            role_title: '',
+            role_kod: '',
+            isCreate: true,
+          });
+        }}
+      >
+        Создать пользователя
+      </button>
+    </PanelStyles>
+  );
+};
 
 const TableRow = ({
   item,
@@ -73,6 +134,22 @@ const TableRow = ({
   //     getPhoto();
   //   }, []);
 
+  const deleteFolk = async () => {
+    let login = sessionStorage.getItem('login');
+    let password = sessionStorage.getItem('password');
+
+    const userData = { login, password, pid: item.personid };
+
+    console.log({ userData });
+    // const delFunc = await fetch('/api/delFolk', {
+    //   method: 'DELETE',
+    //   body: JSON.stringify({ userData }),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+  };
+
   return (
     <Tr key={item.personid}>
       <td
@@ -106,7 +183,7 @@ const TableRow = ({
           <button type='button' onClick={() => setEditUser(item)}>
             <i className='fa-solid fa-pen-to-square' />
           </button>
-          <button type='button' onClick={() => console.log(`Удалить`)}>
+          <button type='button' onClick={() => deleteFolk()}>
             <i className='fa-solid fa-trash-can' />
           </button>
         </div>
@@ -134,6 +211,8 @@ const VisitorsTable = () => {
 
   const [clients, setClients] = useState<IClient[]>([]);
 
+  const { setEditUser } = useGlobalContext();
+
   useEffect(() => {
     getFolks();
   }, [offset, limit]);
@@ -159,6 +238,7 @@ const VisitorsTable = () => {
     setMaxUsers(data.allcnt);
   };
 
+  //Функция пагинации
   const Pagination = () => {
     const [offsetInput, setInputValue] = useState<number>(
       Math.round(offset + 1)
@@ -274,6 +354,7 @@ const VisitorsTable = () => {
 
   return (
     <>
+      <PanelAndFilter />
       {clients?.length > 0 && <Pagination />}
       <CogComponent filtering={filtering} setFilter={setFilter} />
       {clients?.length > 0 &&
@@ -292,6 +373,12 @@ const VisitorsTable = () => {
 
           <tbody>
             {clients.map((item) => {
+              item = {
+                ...item,
+                activated: item.activated == '1',
+                phone_approve: item.phone_approve == '1',
+              };
+
               return (
                 <TableRow
                   key={item.personid}

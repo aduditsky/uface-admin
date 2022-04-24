@@ -16,11 +16,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { login, password, personid } = req.body.data;
-
-  // console.log(req.body.data);
-
-  const pid = personid;
+  const { login, password, pid } = req.body.data;
 
   let loginHeaders = new Headers();
   loginHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
