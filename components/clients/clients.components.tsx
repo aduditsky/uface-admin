@@ -140,7 +140,7 @@ const TableRow = ({
 
     const data = { login, password, pid: item.personid };
 
-    console.log({ data });
+    // console.log({ data });
     const delFunc = await fetch('/api/delFolk', {
       method: 'DELETE',
       body: JSON.stringify({ data }),
@@ -252,9 +252,11 @@ const VisitorsTable = () => {
 
       let pageNumber: number;
 
+      // console.log({ offsetInput });
+
       pageNumber = offsetInput;
       if (pageNumber > maxUsers / limit) {
-        pageNumber = Math.round(maxUsers / limit) - 1;
+        pageNumber = Math.ceil(maxUsers / limit);
       }
       if (pageNumber < 1) {
         pageNumber = 1;
@@ -287,7 +289,11 @@ const VisitorsTable = () => {
           />
           <div> страницу</div>
         </div>
-        <button onClick={() => setOffset(offset - 1)} disabled={offset === 0}>
+        <button
+          className={offset === 0 ? 'disabled' : ''}
+          onClick={() => setOffset(offset - 1)}
+          disabled={offset === 0}
+        >
           Назад
         </button>
         <div className='paggy'>
@@ -344,8 +350,11 @@ const VisitorsTable = () => {
           )}
         </div>
         <button
+          className={
+            Math.ceil(maxUsers / limit) <= offset + 1 ? 'disabled' : ''
+          }
           onClick={() => setOffset(offset + 1)}
-          disabled={Math.ceil(maxUsers / limit) < offset + 2}
+          disabled={Math.ceil(maxUsers / limit) <= offset + 1}
         >
           Вперед
         </button>

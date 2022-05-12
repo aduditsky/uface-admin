@@ -126,11 +126,22 @@ export const LoaderContainer = styled.div`
   align-items: center;
 `;
 
-export const Image = styled.div`
-  height: 200px;
+export const Images = styled.div`
+  /* height: 200px; */
   padding: 15px;
   display: flex;
   gap: 25px;
   justify-content: center;
   align-items: center;
+
+  img.main {
+    border: 1px solid black;
+  }
+`;
+
+export const Image = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: 15px;
 `;

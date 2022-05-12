@@ -115,6 +115,11 @@ export const PagginationStyles = styled.div`
     border-radius: 5px 30px 30px 30px;
     letter-spacing: 0.38px;
     background-color: #2c2c2c;
+
+    &.disabled {
+      background-color: #b5b5b5;
+      color: #ffffff;
+    }
   }
 
   select {

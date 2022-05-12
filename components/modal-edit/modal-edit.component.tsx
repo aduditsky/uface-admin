@@ -17,6 +17,7 @@ import {
   Container,
   FormContainer,
   Image,
+  Images,
   LoaderContainer,
   Modal,
 } from './modal-edit.styles';
@@ -26,6 +27,14 @@ const ModalEdit = () => {
   const containerRef = useRef(null);
   const { editUser, setEditUser } = useGlobalContext();
   const [photo, setPhoto] = useState<string>('');
+  const [photos, setPhotos] = useState<any>([]);
+
+  //server response
+  const [server, setResponse] = useState<any>(null);
+
+  //Растиражирование
+  const [copyStatus, setCopyStatus] = useState<boolean>(false);
+  const [copyResponse, setCopyResponse] = useState<any>(null);
 
   //Get DB Data
   const [instituteS, setInstituteS] = useState(editUser?.vuz_kod);
@@ -64,9 +73,11 @@ const ModalEdit = () => {
         (photoItem: IPhoto) => photoItem.main && photoItem
       );
 
-      const { base64 } = mainPhoto[0];
-      setPhoto(base64);
-      return base64;
+      if (mainPhoto) {
+        setPhotos(mainPhoto);
+      }
+
+      return '';
     }
   }
   const validationSchema = Yup.object().shape({
@@ -104,10 +115,13 @@ const ModalEdit = () => {
   const { register, handleSubmit, getValues, reset, formState } =
     useForm(formOptions);
 
+  // console.log({ server, isResponse: !!server });
+
   //Обновление фотки, если пользователь есть - изменять состояние, при изменении контекста
   useEffect(() => {
     //@ts-ignore
     reset(editUser);
+    setResponse(null);
   }, [editUser]);
   const { errors } = formState;
 
@@ -117,10 +131,13 @@ const ModalEdit = () => {
     activated: string;
     phone_approve: string;
     photo: string;
+    personid: string | undefined;
   }
 
   const updateCroppedPhoto = (photo: string) => {
-    setPhoto(photo);
+    // setPhoto(photo);
+    //@ts-ignore
+    setPhoto(sessionStorage.getItem('recoverPhoto'));
     setCropperActive(false);
   };
 
@@ -128,6 +145,7 @@ const ModalEdit = () => {
 
   async function submitHandler(data: IData) {
     // const check = await onClickHandler(data);
+    setResponse({ start: true });
     let login = sessionStorage.getItem('login');
     let password = sessionStorage.getItem('password');
 
@@ -139,7 +157,7 @@ const ModalEdit = () => {
         : 'Редактирование пользователя'
     );
 
-    console.log({ data });
+    // console.log({ data });
 
     data.login = login;
     data.password = password;
@@ -156,9 +174,117 @@ const ModalEdit = () => {
     });
 
     const resData = await res.json();
+
+    // console.log({ resData });
+    setResponse(resData);
     // display form data on success
 
     // sessionStorage.setItem('user', JSON.stringify(data));
+  }
+
+  // CopyAccsToTerminals
+  async function copyAccsToTerminals() {
+    // const check = await onClickHandler(data);
+    setCopyStatus(true);
+    setCopyResponse(null);
+    let login = sessionStorage.getItem('login');
+    let password = sessionStorage.getItem('password');
+
+    let api = '/api/CopyAccsToTerminals';
+
+    console.log('Копирование на терминалы');
+
+    // console.log({ data });
+
+    //@ts-ignore
+    let data: IData = {
+      login: login,
+      password: password,
+      personid: editUser?.personid,
+    };
+
+    const res = await fetch(api, {
+      method: 'POST',
+      body: JSON.stringify({ data }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resData = await res.json();
+
+    console.log({ resData });
+    setCopyResponse(resData);
+    setCopyStatus(false);
+  }
+
+  // EditAccsToTerminals
+  async function editAccsToTerminals() {
+    // const check = await onClickHandler(data);
+    setCopyStatus(true);
+    setCopyResponse(null);
+    let login = sessionStorage.getItem('login');
+    let password = sessionStorage.getItem('password');
+
+    let api = '/api/EditAccsInTerminals';
+
+    console.log('Копирование на терминалы');
+
+    // console.log({ data });
+
+    //@ts-ignore
+    let data: IData = {
+      login: login,
+      password: password,
+      personid: editUser?.personid,
+    };
+
+    const res = await fetch(api, {
+      method: 'POST',
+      body: JSON.stringify({ data }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resData = await res.json();
+
+    console.log({ resData });
+    setCopyResponse(resData);
+    setCopyStatus(false);
+  }
+
+  // DelAccsToTerminals
+  async function delAccsToTerminals() {
+    // const check = await onClickHandler(data);
+    setCopyStatus(true);
+    setCopyResponse(null);
+    let login = sessionStorage.getItem('login');
+    let password = sessionStorage.getItem('password');
+
+    let api = '/api/DelAccsToTerminals';
+
+    console.log('Удалить с терминалов');
+    //@ts-ignore
+    let data: IData = {
+      login: login,
+      password: password,
+      personid: editUser?.personid,
+    };
+
+    const res = await fetch(api, {
+      method: 'POST',
+      body: JSON.stringify({ data }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const resData = await res.json();
+
+    // console.log({ resData });
+    setCopyResponse(resData);
+    setCopyStatus(false);
   }
 
   // const onClickHandler = async (user: IData) => {
@@ -216,6 +342,7 @@ const ModalEdit = () => {
 
     reset();
     getPhoto();
+    setPhotos([]);
     // if (editUser && editUser?.isCreate === false) {
     // }
   }, [editUser]);
@@ -298,7 +425,7 @@ const ModalEdit = () => {
               {editUser?.isCreate && (
                 <Image>
                   {photo !== '' ? (
-                    <Image>
+                    <Images>
                       {photo && <img src={photo} height={200} />}
                       <button
                         type='button'
@@ -309,7 +436,7 @@ const ModalEdit = () => {
                       >
                         Удалить
                       </button>
-                    </Image>
+                    </Images>
                   ) : (
                     <div className='photos-block'>
                       <span>Загрузите фотографии или сфотографируетесь</span>
@@ -338,8 +465,19 @@ const ModalEdit = () => {
               )}
               {!editUser?.isCreate && (
                 <>
-                  {photo !== '' ? (
-                    <Image>{photo && <img src={photo} />}</Image>
+                  {photos.length > 0 ? (
+                    <Images>
+                      {photos.slice(0, 4).map((photo: IPhoto, i: number) => (
+                        <Image key={photo.faceid}>
+                          <img
+                            className={photo.main ? 'main' : ''}
+                            src={photo.base64}
+                          />
+                          <input type='checkbox' defaultChecked={photo.main} />
+                        </Image>
+                      ))}
+                      {/* {photo && <img src={photo} />} */}
+                    </Images>
                   ) : (
                     <LoaderContainer>
                       <Bars color='#2c2c2c' height={100} width={100} />
@@ -528,9 +666,72 @@ const ModalEdit = () => {
                     </div>
                   </div>
                 </div>
+
+                {!editUser.isCreate && (
+                  <div
+                    style={{
+                      margin: '20px 0',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 10,
+                    }}
+                  >
+                    <h5>Тиражирование</h5>
+                    {!!copyResponse &&
+                      copyResponse?.status === 'success' &&
+                      'Операция выполнена успешно'}
+                    <button
+                      type='button'
+                      onClick={() => {
+                        copyAccsToTerminals();
+                      }}
+                      className='btn btn-primary mr-1'
+                    >
+                      {copyStatus
+                        ? 'Подождите'
+                        : 'Растиражироваить на терминалы без фото'}
+                    </button>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        editAccsToTerminals();
+                      }}
+                      className='btn btn-primary mr-1'
+                    >
+                      {copyStatus
+                        ? 'Подождите'
+                        : 'Тиражирование изменений данных'}
+                    </button>
+                    <button
+                      type='button'
+                      onClick={() => {
+                        delAccsToTerminals();
+                      }}
+                      className='btn btn-primary mr-1'
+                    >
+                      {copyStatus ? 'Подождите' : 'Удалить с терминалов'}
+                    </button>
+                  </div>
+                )}
+
                 <div className='form-group'>
+                  <h5>
+                    {editUser?.isCreate
+                      ? 'Создать пользователя'
+                      : 'Обновить пользователя'}
+                  </h5>
+
+                  {!!server && server.status === 'error' && (
+                    <div style={{ margin: '10px 0' }}>{server?.errordesc}</div>
+                  )}
+                  {!!server && server.status === 'success' && (
+                    <div style={{ margin: '10px 0' }}>{server?.statusdesc}</div>
+                  )}
+
                   <button type='submit' className='btn btn-primary mr-1'>
-                    Подтвердить
+                    {!!server && server?.status !== 'success'
+                      ? 'Подождите...'
+                      : 'Подтвердить'}
                   </button>
                 </div>
               </form>
