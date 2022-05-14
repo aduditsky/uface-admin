@@ -67,14 +67,10 @@ const ModalEdit = () => {
           'Content-Type': 'application/json',
         },
       });
-      const photo = await resPhoto.json();
+      const photo: IPhoto[] = await resPhoto.json();
 
-      const mainPhoto: IPhoto[] = photo?.photos?.filter(
-        (photoItem: IPhoto) => photoItem.main && photoItem
-      );
-
-      if (mainPhoto) {
-        setPhotos(mainPhoto);
+      if (photo) {
+        setPhotos(photo);
       }
 
       return '';
