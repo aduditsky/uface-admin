@@ -30,8 +30,6 @@ export default function TerminalsList() {
         },
       }).then((result) => result.json());
 
-      console.log({ res });
-
       return res.terms;
     },
     {

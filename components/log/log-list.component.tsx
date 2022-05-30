@@ -25,10 +25,13 @@ const LogList = () => {
     }
   };
 
+  useEffect(() => {
+    getLogs();
+  }, []);
+
   return (
     <div>
-      <LogUsersList users={userList} />
-
+      <h1>Последние проходы</h1>
       {userList.length > 0 && <LogUsersList users={userList} />}
     </div>
   );
