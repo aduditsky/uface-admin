@@ -51,14 +51,34 @@ const LeftMenuComponent = () => {
         ></i>
       </Button>
       <LeftMenuListStyles>
-        <ListItemStyles>
-          <i className='fas fa-address-book'></i>{' '}
-          <span className={isOpen ? 'active' : ''}>Отделы и сотрудники</span>
-        </ListItemStyles>
-        <ListItemStyles>
-          <i className='fas fa-desktop'></i>{' '}
-          <span className={isOpen ? 'active' : ''}>Устройства</span>
-        </ListItemStyles>
+        <Link href={'/logs'}>
+          <a>
+            <ListItemStyles>
+              <i className='fa-solid fa-right-from-bracket'></i>{' '}
+              <span className={isOpen ? 'active' : ''}>
+                Полный список логов
+              </span>
+            </ListItemStyles>
+          </a>
+        </Link>
+        <Link href={'/persons'}>
+          <a>
+            <ListItemStyles>
+              <i className='fas fa-address-book'></i>{' '}
+              <span className={isOpen ? 'active' : ''}>
+                Отделы и сотрудники
+              </span>
+            </ListItemStyles>
+          </a>
+        </Link>
+        <Link href={'/terminals'}>
+          <a>
+            <ListItemStyles>
+              <i className='fas fa-desktop'></i>{' '}
+              <span className={isOpen ? 'active' : ''}>Устройства</span>
+            </ListItemStyles>
+          </a>
+        </Link>
       </LeftMenuListStyles>
     </LeftMenuContainer>
   ) : (
