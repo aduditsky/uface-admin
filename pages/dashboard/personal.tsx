@@ -16,7 +16,9 @@ const personal = () => {
 
   useEffect(() => {
     if (window) {
+      //@ts-ignore
       if (sessionStorage?.getItem('user')?.length > 0) {
+        //@ts-ignore
         const user = JSON.parse(sessionStorage?.getItem('user'));
         setUser(user);
       }

@@ -232,10 +232,10 @@ const VisitorsTable = () => {
     user?.roles.map((item) =>
       item.authorities.map((authItem) => {
         if (authItem.authority_kod === 'users') {
-          console.log({ authItem });
+          // console.log({ authItem });
           setCanReadLogs(true);
           authItem.authority_fields.map((fieldItem) => {
-            console.log({ fieldItem });
+            // console.log({ fieldItem });
             if (
               fieldItem.field_kod === 'ACTIV' &&
               fieldItem.field_value.includes('1')
