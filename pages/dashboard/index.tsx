@@ -118,6 +118,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
 function LogStudentsMonitoring({}) {
   const [users, setUsers] = useState<IStudent[]>([]);
+  const [listProp, setListProp] = useState<any[]>([]);
 
   const { status, data, error, isFetching } = useQuery(
     'lastEntered',
@@ -138,6 +139,25 @@ function LogStudentsMonitoring({}) {
       refetchInterval: 5000,
     }
   );
+
+  useEffect(() => {
+    if (users.length > 0 && listProp.length === 0) {
+      Object.keys(users[0])?.map((item) => {
+        let protertyItem = { name: item, property: '-none' };
+        let newListProp = listProp;
+        newListProp.push(protertyItem);
+        setListProp(newListProp);
+      });
+
+      let newListProp = listProp;
+      newListProp[9].property = '';
+      newListProp[10].property = '';
+      newListProp[15].property = '';
+      newListProp[17].property = '';
+      newListProp[20].property = '';
+      setListProp(newListProp);
+    }
+  }, [users]);
 
   if (status === 'loading') return <h1>Loading...</h1>;
   //@ts-ignore
@@ -164,16 +184,72 @@ function LogStudentsMonitoring({}) {
       <div>
         <h3>Последние вошедшие:</h3>
         <Table striped borderless hover responsive size='lg'>
+          <thead>
+            <tr>
+              {listProp.map((item, key) => (
+                <th className={'d' + item.property} key={key}>
+                  {item.name}
+                </th>
+              ))}
+            </tr>
+          </thead>
           <tbody>
             {users.map((item, i) => {
               return (
                 <Tr key={`${item.id}-${i}`}>
-                  <td>{item.id}</td>
-                  <td>{item.FIO}</td>
-
-                  <td>{item.title_terminal}</td>
-                  <td>{item.maskState}</td>
-                  <td>{item.id_terminal}</td>
+                  <td className={'d' + listProp[0].property}>{item.dt_log}</td>
+                  <td className={'d' + listProp[1].property}>
+                    {item.terminal_key}
+                  </td>
+                  <td className={'d' + listProp[2].property}>{item.data}</td>
+                  <td className={'d' + listProp[3].property}>
+                    {item.maskState}
+                  </td>
+                  <td className={'d' + listProp[4].property}>
+                    {item.tempUnit}
+                  </td>
+                  <td className={'d' + listProp[5].property}>
+                    {item.aliveType}
+                  </td>
+                  <td className={'d' + listProp[6].property}>
+                    {item.local_ip_terminal}
+                  </td>
+                  <td className={'d' + listProp[7].property}>
+                    {item.identifyType}
+                  </td>
+                  <td className={'d' + listProp[8].property}>{item.type}</td>
+                  <td className={'d' + listProp[9].property}>{item.FIO}</td>
+                  <td className={'d' + listProp[10].property}>
+                    {item.title_terminal}
+                  </td>
+                  <td className={'d' + listProp[11].property}>
+                    {item.std_temperature}
+                  </td>
+                  <td className={'d' + listProp[12].property}>
+                    {item.recType}
+                  </td>
+                  <td className={'d' + listProp[13].property}>{item.path}</td>
+                  <td className={'d' + listProp[14].property}>{item.qrCode}</td>
+                  <td className={'d' + listProp[15].property}>
+                    {item.temperature}
+                  </td>
+                  <td className={'d' + listProp[16].property}>
+                    {item.permissionTimeType}
+                  </td>
+                  <td className={'d' + listProp[17].property}>
+                    {item.id_terminal}
+                  </td>
+                  <td className={'d' + listProp[18].property}>
+                    {item.personId}
+                  </td>
+                  <td className={'d' + listProp[19].property}>{item.model}</td>
+                  <td className={'d' + listProp[20].property}>{item.id}</td>
+                  <td className={'d' + listProp[21].property}>
+                    {item.passTimeType}
+                  </td>
+                  <td className={'d' + listProp[22].property}>
+                    {item.recModeType}
+                  </td>
                 </Tr>
               );
             })}
