@@ -26,11 +26,58 @@ const LastEntered = styled.div`
   border: 1px solid #333;
   border-radius: 25px;
   padding: 30px;
+
+  display: flex;
+  gap: 50px;
+  width: fit-content;
+
+  h2 {
+    font-weight: bold;
+  }
+
+  .fio {
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  .terminal {
+    font-size: 1em;
+
+    .title {
+      font-weight: bold;
+    }
+  }
+
+  .date {
+    margin-top: 10px;
+    font-size: 0.89em;
+  }
+`;
+
+const Container = styled.div`
+  h2,
+  h3 {
+    margin: 10px;
+    margin-top: 24px;
+    font-weight: bold;
+  }
 `;
 
 const DashboardPage: NextPage = ({}: IProps) => {
   //Временная мера
-  const { setUser } = useGlobalContext();
+  const { user, setUser } = useGlobalContext();
+
+  const [canReadLogs, setCanReadLogs] = useState(false);
+
+  useEffect(() => {
+    user?.roles.map((item) =>
+      item.authorities.map((authItem) => {
+        if (authItem.authority_kod === 'visitlog') {
+          setCanReadLogs(true);
+        }
+      })
+    );
+  }, [user]);
 
   useEffect(() => {
     if (window) {
@@ -46,10 +93,13 @@ const DashboardPage: NextPage = ({}: IProps) => {
   return (
     <DashboardBody>
       {/* <StatsComponents /> */}
-      <h1>Главная</h1>
+      <h1 style={{ fontWeight: 'bold' }}>Главная</h1>
 
-      <h2>Последние вошедшие</h2>
-      <LogStudentsMonitoring />
+      {canReadLogs && (
+        <>
+          <LogStudentsMonitoring />
+        </>
+      )}
     </DashboardBody>
   );
 };
@@ -90,41 +140,49 @@ function LogStudentsMonitoring({}) {
   );
 
   if (status === 'loading') return <h1>Loading...</h1>;
-  if (status === 'error') return <span>Error: {error.message}</span>;
+  if (status === 'error') return <span>Error: {error?.message}</span>;
 
   return (
-    <div>
-      <LastEntered>
+    <Container>
+      <div>
         <h2>Последний вход</h2>
-        <div>{users[0].FIO}</div>
-        <div>{users[0].title_terminal}</div>
-        <div>
-          <Moment date={users[0].dt_log} format='DD.MM.YYYY HH:mm:ss' />
-        </div>
-      </LastEntered>
-      <h3>Последние вошедшие:</h3>
-      <Table striped borderless hover responsive size='lg'>
-        <tbody>
-          {users.map((item, i) => {
-            return (
-              <Tr key={`${item.id}-${i}`}>
-                <td style={{ cursor: 'pointer', height: 40, width: 80 }}></td>
+        <LastEntered>
+          <div>
+            <div className='fio'>{users[0].FIO}</div>
+            <div className='terminal'>
+              <span className='title'>Устройство: </span>
+              <span>{users[0].title_terminal}</span>
+            </div>
+            <div className='date'>
+              <div>Дата входа:</div>
+              <Moment date={users[0]?.dt_log} format='DD.MM.YYYY HH:mm:ss' />
+            </div>
+          </div>
+        </LastEntered>
+      </div>
+      <div>
+        <h3>Последние вошедшие:</h3>
+        <Table striped borderless hover responsive size='lg'>
+          <tbody>
+            {users.map((item, i) => {
+              return (
+                <Tr key={`${item.id}-${i}`}>
+                  <td>{item.id}</td>
+                  <td>{item.FIO}</td>
 
-                <td>{item.id}</td>
-                <td>{item.FIO}</td>
-
-                <td>{item.title_terminal}</td>
-                <td>{item.maskState}</td>
-                <td>{item.id_terminal}</td>
-              </Tr>
-            );
-          })}
-        </tbody>
-      </Table>
+                  <td>{item.title_terminal}</td>
+                  <td>{item.maskState}</td>
+                  <td>{item.id_terminal}</td>
+                </Tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </div>
       <Link href={`/logs`} passHref>
         <a>Посмотреть всех</a>
       </Link>
-    </div>
+    </Container>
   );
 }
 

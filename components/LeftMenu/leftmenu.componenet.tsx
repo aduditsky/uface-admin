@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
 //Context
@@ -18,7 +18,28 @@ const LeftMenuComponent = () => {
   const router = useRouter();
   const { user } = useGlobalContext();
 
+  const [canReadLogs, setCanReadLogs] = useState(false);
+  const [canReadUsers, setCanReadUsers] = useState(false);
+  const [canReadTerminals, setCanReadTerminals] = useState(false);
+
   const [isOpen, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    user?.roles.map((item) =>
+      item.authorities.map((authItem) => {
+        if (authItem.authority_kod === 'visitlog') {
+          setCanReadLogs(true);
+        }
+        if (authItem.authority_kod === 'users') {
+          setCanReadUsers(true);
+        }
+
+        if (authItem.authority_kod === 'terminals') {
+          setCanReadTerminals(true);
+        }
+      })
+    );
+  }, [user]);
 
   return user?.status === 'success' && router.pathname !== '/login' ? (
     <LeftMenuContainer open={isOpen}>
@@ -51,34 +72,40 @@ const LeftMenuComponent = () => {
         ></i>
       </Button>
       <LeftMenuListStyles>
-        <Link href={'/logs'}>
-          <a>
-            <ListItemStyles>
-              <i className='fa-solid fa-right-from-bracket'></i>{' '}
-              <span className={isOpen ? 'active' : ''}>
-                Полный список логов
-              </span>
-            </ListItemStyles>
-          </a>
-        </Link>
-        <Link href={'/persons'}>
-          <a>
-            <ListItemStyles>
-              <i className='fas fa-address-book'></i>{' '}
-              <span className={isOpen ? 'active' : ''}>
-                Отделы и сотрудники
-              </span>
-            </ListItemStyles>
-          </a>
-        </Link>
-        <Link href={'/terminals'}>
-          <a>
-            <ListItemStyles>
-              <i className='fas fa-desktop'></i>{' '}
-              <span className={isOpen ? 'active' : ''}>Устройства</span>
-            </ListItemStyles>
-          </a>
-        </Link>
+        {canReadLogs && (
+          <Link href={'/logs'}>
+            <a>
+              <ListItemStyles>
+                <i className='fa-solid fa-right-from-bracket'></i>{' '}
+                <span className={isOpen ? 'active' : ''}>
+                  Полный список логов
+                </span>
+              </ListItemStyles>
+            </a>
+          </Link>
+        )}
+        {canReadUsers && (
+          <Link href={'/persons'}>
+            <a>
+              <ListItemStyles>
+                <i className='fas fa-address-book'></i>{' '}
+                <span className={isOpen ? 'active' : ''}>
+                  Отделы и сотрудники
+                </span>
+              </ListItemStyles>
+            </a>
+          </Link>
+        )}
+        {canReadTerminals && (
+          <Link href={'/terminals'}>
+            <a>
+              <ListItemStyles>
+                <i className='fas fa-desktop'></i>{' '}
+                <span className={isOpen ? 'active' : ''}>Устройства</span>
+              </ListItemStyles>
+            </a>
+          </Link>
+        )}
       </LeftMenuListStyles>
     </LeftMenuContainer>
   ) : (

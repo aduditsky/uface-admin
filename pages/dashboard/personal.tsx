@@ -13,10 +13,11 @@ import { DashboardBody } from 'styles/dashboard.styles';
 const personal = () => {
   //Временная мера
   const { setUser } = useGlobalContext();
+
   useEffect(() => {
     if (window) {
-      if (sessionStorage.getItem('user')?.length > 0) {
-        const user = JSON.parse(sessionStorage.getItem('user'));
+      if (sessionStorage?.getItem('user')?.length > 0) {
+        const user = JSON.parse(sessionStorage?.getItem('user'));
         setUser(user);
       }
     }

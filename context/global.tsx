@@ -6,17 +6,32 @@ import {
   useState,
   useEffect,
 } from 'react';
-import useLocalStorage from '../lib/useLocalStorage';
+// import useLocalStorage from '../lib/useLocalStorage';
 
 interface IProps {
   children: ReactNode;
+}
+
+interface IFields {
+  field_kod: string;
+  field_name: string;
+  field_value: string;
+}
+
+interface IAuthorityFields {
+  authority_fields: IFields[];
+  authority_kod: string;
+}
+
+interface IRoles {
+  authorities: IAuthorityFields[];
 }
 
 export interface IUser {
   login: string;
   status: string;
   image: string | undefined;
-  roles: [];
+  roles: IRoles[];
 }
 
 export type GlobalContent = {

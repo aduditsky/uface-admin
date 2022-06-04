@@ -59,38 +59,40 @@ const PanelStyles = styled.div`
   }
 `;
 
-const PanelAndFilter = () => {
+const PanelAndFilter = ({ canAddUser }: { canAddUser: boolean }) => {
   const { setEditUser } = useGlobalContext();
 
   return (
     <PanelStyles>
-      <button
-        type='button'
-        onClick={() => {
-          setEditUser({
-            dateborn: '',
-            activated: false,
-            email: '',
-            fio: '',
-            fname: '',
-            lname: '',
-            sname: '',
-            id: '',
-            personid: '',
-            phone: '',
-            phone_approve: false,
-            role: '',
-            photo: '',
-            vuz_title: '',
-            vuz_kod: '',
-            role_title: '',
-            role_kod: '',
-            isCreate: true,
-          });
-        }}
-      >
-        Создать пользователя
-      </button>
+      {canAddUser && (
+        <button
+          type='button'
+          onClick={() => {
+            setEditUser({
+              dateborn: '',
+              activated: false,
+              email: '',
+              fio: '',
+              fname: '',
+              lname: '',
+              sname: '',
+              id: '',
+              personid: '',
+              phone: '',
+              phone_approve: false,
+              role: '',
+              photo: '',
+              vuz_title: '',
+              vuz_kod: '',
+              role_title: '',
+              role_kod: '',
+              isCreate: true,
+            });
+          }}
+        >
+          Создать пользователя
+        </button>
+      )}
     </PanelStyles>
   );
 };
@@ -98,9 +100,11 @@ const PanelAndFilter = () => {
 const TableRow = ({
   item,
   filtering,
+  canEditUser,
 }: {
   item: IClient;
   filtering: { property: string; name: string }[];
+  canEditUser: boolean;
 }) => {
   const { setEditUser } = useGlobalContext();
 
@@ -148,8 +152,6 @@ const TableRow = ({
         'Content-Type': 'application/json',
       },
     });
-
-    console.log({ delFunc });
   };
 
   return (
@@ -180,16 +182,18 @@ const TableRow = ({
       <td className={'d' + filtering[5].property}>{item.personid}</td>
       <td className={'d' + filtering[6].property}>{item.role_title}</td>
       <td className={'d' + filtering[7].property}>{item.dateborn}</td>
-      <td className={'d'}>
-        <div className='manage-buttons'>
-          <button type='button' onClick={() => setEditUser(item)}>
-            <i className='fa-solid fa-pen-to-square' />
-          </button>
-          <button type='button' onClick={() => deleteFolk()}>
-            <i className='fa-solid fa-trash-can' />
-          </button>
-        </div>
-      </td>
+      {canEditUser && (
+        <td className={'d'}>
+          <div className='manage-buttons'>
+            <button type='button' onClick={() => setEditUser(item)}>
+              <i className='fa-solid fa-pen-to-square' />
+            </button>
+            <button type='button' onClick={() => deleteFolk()}>
+              <i className='fa-solid fa-trash-can' />
+            </button>
+          </div>
+        </td>
+      )}
     </Tr>
   );
 };
@@ -213,7 +217,43 @@ const VisitorsTable = () => {
 
   const [clients, setClients] = useState<IClient[]>([]);
 
-  const { setEditUser } = useGlobalContext();
+  const { user, setEditUser } = useGlobalContext();
+
+  const [canReadLogs, setCanReadLogs] = useState(false);
+  const [canEditUser, setCanEditUser] = useState(false);
+  const [canAddUser, setCanAddUser] = useState(false);
+
+  // Алексей Давыдулин, [4 Jun 2022, 10:29:32 PM]:
+  // 3 - это просмотр
+  // 1 - добавление
+  // 2 - редактироанте
+
+  useEffect(() => {
+    user?.roles.map((item) =>
+      item.authorities.map((authItem) => {
+        if (authItem.authority_kod === 'users') {
+          console.log({ authItem });
+          setCanReadLogs(true);
+          authItem.authority_fields.map((fieldItem) => {
+            console.log({ fieldItem });
+            if (
+              fieldItem.field_kod === 'ACTIV' &&
+              fieldItem.field_value.includes('1')
+            ) {
+              setCanAddUser(true);
+              setCanEditUser(true);
+            }
+            if (
+              fieldItem.field_kod === 'ACTIV' &&
+              fieldItem.field_value.includes('2')
+            ) {
+              setCanEditUser(true);
+            }
+          });
+        }
+      })
+    );
+  }, [user]);
 
   useEffect(() => {
     getFolks();
@@ -251,8 +291,6 @@ const VisitorsTable = () => {
       }
 
       let pageNumber: number;
-
-      // console.log({ offsetInput });
 
       pageNumber = offsetInput;
       if (pageNumber > maxUsers / limit) {
@@ -365,7 +403,7 @@ const VisitorsTable = () => {
 
   return (
     <>
-      <PanelAndFilter />
+      <PanelAndFilter canAddUser={canAddUser} />
       {clients?.length > 0 && <Pagination />}
       <CogComponent filtering={filtering} setFilter={setFilter} />
       {clients?.length > 0 &&
@@ -378,7 +416,9 @@ const VisitorsTable = () => {
                   {item.name}
                 </th>
               ))}
-              <th style={{ textAlign: 'center' }}>Управление</th>
+              {canEditUser && (
+                <th style={{ textAlign: 'center' }}>Управление</th>
+              )}
             </tr>
           </thead>
 
@@ -392,6 +432,7 @@ const VisitorsTable = () => {
 
               return (
                 <TableRow
+                  canEditUser={canEditUser}
                   key={item.personid}
                   item={item}
                   filtering={filtering}

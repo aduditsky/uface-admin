@@ -34,7 +34,7 @@ export default async function handler(
 
   //Body
   var urlencoded = new URLSearchParams();
-  urlencoded.append('linked', 'true');
+  urlencoded.append('linked', 'false');
 
   var requestOptions: IReqOption = {
     method: 'POST',
