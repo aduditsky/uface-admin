@@ -18,6 +18,7 @@ import { useQuery } from 'react-query';
 import styled from 'styled-components';
 import Moment from 'react-moment';
 import Link from 'next/link';
+import CogComponent from 'components/clients/cog.component';
 
 //interfaces
 interface IProps {}
@@ -150,9 +151,9 @@ function LogStudentsMonitoring({}) {
       });
 
       let newListProp = listProp;
+      newListProp[8].property = '';
       newListProp[9].property = '';
       newListProp[10].property = '';
-      newListProp[15].property = '';
       newListProp[17].property = '';
       newListProp[20].property = '';
       setListProp(newListProp);
@@ -183,6 +184,7 @@ function LogStudentsMonitoring({}) {
       </div>
       <div>
         <h3>Последние вошедшие:</h3>
+        <CogComponent filtering={listProp} setFilter={setListProp} />
         <Table striped borderless hover responsive size='lg'>
           <thead>
             <tr>
