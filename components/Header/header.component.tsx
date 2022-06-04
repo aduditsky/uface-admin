@@ -9,14 +9,16 @@ const HeaderComponents = () => {
   const { user, setUser } = useGlobalContext();
   useEffect(() => {
     if (window) {
+      //@ts-ignore
       if (sessionStorage?.getItem('user')?.length > 0) {
+        //@ts-ignore
         const user = JSON.parse(sessionStorage?.getItem('user'));
         setUser(user);
       }
     }
   }, []);
 
-  console.log({ user });
+  // console.log({ user });
 
   return user?.status === 'success' && router.pathname !== '/login' ? (
     <HeaderContainer>

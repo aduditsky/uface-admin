@@ -42,7 +42,7 @@ function RegisterForm() {
   }
 
   function onSubmit(data: IData) {
-    console.log({ data });
+    // console.log({ data });
     // display form data on success
     alert('SUCCESS!! :-)\n\n' + JSON.stringify(data, null, 4));
     return false;

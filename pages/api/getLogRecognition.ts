@@ -52,7 +52,7 @@ export default async function handler(
     .then((response) => response.text())
     .then((result) => {
       res.status(200).json(result);
-      console.log(result);
+      // console.log(result);
     })
     .catch((error) => console.log('error', error));
 }

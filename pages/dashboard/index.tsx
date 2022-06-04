@@ -140,6 +140,7 @@ function LogStudentsMonitoring({}) {
   );
 
   if (status === 'loading') return <h1>Loading...</h1>;
+  //@ts-ignore
   if (status === 'error') return <span>Error: {error?.message}</span>;
 
   return (

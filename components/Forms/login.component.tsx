@@ -29,13 +29,13 @@ function LoginForm() {
 
   async function submitHandler(data: IData) {
     if (data !== null) {
-      console.log({ data });
+      // console.log({ data });
       const check = await onClickHandler(data);
       sessionStorage.setItem('login', data.login);
       sessionStorage.setItem('password', data.password);
       sessionStorage.setItem('user', JSON.stringify(check));
       setUser(check);
-      console.log({ check });
+      // console.log({ check });
     }
   }
 

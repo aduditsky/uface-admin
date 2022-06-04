@@ -37,7 +37,7 @@ function PersonalInfo() {
       .min(6, 'Пароль должен состоять минимум из 6 символов')
       .required('Пароль обязателен'),
   });
-  console.log(user);
+  // console.log(user);
   const formOptions = {
     resolver: yupResolver(validationSchema),
     defaultValues: { name: user?.login },

@@ -14,7 +14,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { user } = useGlobalContext();
-  console.log({ user });
+  // console.log({ user });
   const router = useRouter();
   useEffect(() => {
     if (router.pathname !== '/login' && user === null) {
