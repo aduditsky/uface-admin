@@ -10,6 +10,7 @@ import { DashboardBody } from 'styles/dashboard.styles';
 //components
 import StatsComponents from 'components/Stats/stats.components';
 import LogList from 'components/log/log-list.component';
+import LogGrid from 'components/log/log-grid.component';
 
 //interfaces
 interface IProps {}
@@ -31,7 +32,8 @@ const LogListPage: NextPage = ({}: IProps) => {
 
   return (
     <DashboardBody>
-      <LogList />
+      <LogGrid />
+      {/* <LogList /> */}
     </DashboardBody>
   );
 };

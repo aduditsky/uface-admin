@@ -8,7 +8,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
     "@hookform/resolvers": "^2.8.3",
+    "@mui/material": "^5.9.0",
+    "@mui/x-data-grid": "^5.13.1",
     "bootstrap": "^4.5.2",
     "browser-image-compression": "^2.0.0",
     "cookie": "^0.4.1",
@@ -27,6 +31,7 @@
     "react-loading-spin": "^2.1.9",
     "react-moment": "^1.1.2",
     "react-query": "^3.39.1",
+    "react-table": "^7.8.0",
     "react-tippy": "^1.4.0",
     "react-webcam": "^7.0.0",
     "styled-components": "^5.3.3",

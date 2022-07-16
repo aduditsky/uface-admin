@@ -13,6 +13,7 @@ import { DashboardBody } from 'styles/dashboard.styles';
 import StatsComponents from 'components/Stats/stats.components';
 import LogList from 'components/log/log-list.component';
 import TerminalsList from 'components/terminals/terminals.components';
+import TerminalsGrid from 'components/terminals/terminals-grid.component';
 
 //interfaces
 interface IProps {}
@@ -34,7 +35,8 @@ const PersonsPage: NextPage = ({}: IProps) => {
 
   return (
     <DashboardBody>
-      <TerminalsList />
+      <TerminalsGrid />
+      {/* <TerminalsList /> */}
     </DashboardBody>
   );
 };

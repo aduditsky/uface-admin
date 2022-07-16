@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import type { GetServerSideProps, NextApiRequest, NextPage } from 'next';
-import VisitorsTable from 'components/clients/clients.components';
 
 //context
 import { IUser, useGlobalContext } from 'context/global';
@@ -11,6 +10,8 @@ import { DashboardBody } from 'styles/dashboard.styles';
 //components
 import StatsComponents from 'components/Stats/stats.components';
 import LogList from 'components/log/log-list.component';
+import VisitorsTable from 'components/clients/clients.components';
+import VisitorsGrid from 'components/clients/clients-grid.component';
 
 //interfaces
 interface IProps {}
@@ -32,7 +33,8 @@ const PersonsPage: NextPage = ({}: IProps) => {
 
   return (
     <DashboardBody>
-      <VisitorsTable />
+      <VisitorsGrid />
+      {/* <VisitorsTable /> */}
     </DashboardBody>
   );
 };
